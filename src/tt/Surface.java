@@ -1,6 +1,5 @@
 package tt;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -8,12 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import tt.Formes.FormesPieces;;
+import tt.Formes.FormesPieces;
 
 /**
  * 
@@ -29,34 +35,63 @@ public class Surface extends JPanel implements ActionListener {
 
     final int largeurSurface = 10;
     final int hauteurSurface = 22;
-
+    public static int score=0;
+    
     Timer timer;
     boolean isFallingFinished = false;
+    
     boolean estCommence = false;
     boolean estSuspendu = false;
     int nombreLigneDetruite = 0;
     int curX = 0;
     int curY = 0;
+    
     JLabel statusbar;
     Formes pieceCourante;
     FormesPieces[] surf;
 
-
+    int scores[]= new int [6];
+    int scoreInter;
+    int indiceInter;
+    boolean arret=false;
 
     public Surface(Tetris parent) {
+    	
+    	String []tableauScores= new String [5];
+    	
+    	InputStream ips;
+		try {
+			ips = new FileInputStream("fichier");
+		 
+			InputStreamReader ipsr=new InputStreamReader(ips);
+			BufferedReader br=new BufferedReader(ipsr);
+			String ligne;
+			int i=0;
+		
+			while ((ligne=br.readLine())!=null){
+				tableauScores[i]=ligne;
+				scores[i]=Integer.valueOf(ligne);
+				i++;
+			}
+				br.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+       
+		
 
        setFocusable(true);
        pieceCourante = new Formes();
        timer = new Timer(400, this);
        timer.start(); 
 
-       
+       statusbar =  parent.getStatusBar();
        surf = new FormesPieces[largeurSurface * hauteurSurface];
        addKeyListener(new TAdapter());
        effacerSur();  
     }
 
-    
     public void actionPerformed(ActionEvent e) {
         if (isFallingFinished) {
             isFallingFinished = false;
@@ -75,6 +110,7 @@ public class Surface extends JPanel implements ActionListener {
      * Méthode permettant de créer une nouvelle instance de tetris
      */
 
+
     public void start()
     {
         if (estSuspendu)
@@ -88,11 +124,12 @@ public class Surface extends JPanel implements ActionListener {
         nouvellePiece();
         timer.start();
     }
-    
+
     /**
      * Méthode permettant de suspendre le jeu
      */
 
+    
     private void pause()
     {
         if (!estCommence)
@@ -101,18 +138,19 @@ public class Surface extends JPanel implements ActionListener {
         estSuspendu = !estSuspendu;
         if (estSuspendu) {
             timer.stop();
-            statusbar.setText("pause");
+            statusbar.setText("paused");
         } else {
             timer.start();
-            statusbar.setText(String.valueOf(nombreLigneDetruite));
+            statusbar.setText(String.valueOf(Surface.score));
         }
         repaint();
     }
-    
+
     /**
      * Méthode permettant de dessiner la surface du jeu
      */
 
+    
     public void paint(Graphics g)
     { 
         super.paint(g);
@@ -123,20 +161,20 @@ public class Surface extends JPanel implements ActionListener {
 
         for (int i = 0; i < hauteurSurface; ++i) {
             for (int j = 0; j < largeurSurface; ++j) {
-                FormesPieces forme = emplacememtPiece(j, hauteurSurface - i - 1);
-                if (forme != FormesPieces.NoShape)
+                FormesPieces shape = emplacememtPiece(j, hauteurSurface - i - 1);
+                if (shape != FormesPieces.NoShape)
                     dessinerCarree(g, 0 + j * largeurCarree(),
-                               surfaceHaut + i * hauteurCarree(), forme);
+                               surfaceHaut + i * hauteurCarree(), shape);
             }
         }
 
-        if (pieceCourante.getForme() != FormesPieces.NoShape) {
+        if (pieceCourante.getShape() != FormesPieces.NoShape) {
             for (int i = 0; i < 4; ++i) {
                 int x = curX + pieceCourante.x(i);
                 int y = curY - pieceCourante.y(i);
                 dessinerCarree(g, 0 + x * largeurCarree(),
                            surfaceHaut + (hauteurSurface - y - 1) * hauteurCarree(),
-                           pieceCourante.getForme());
+                           pieceCourante.getShape());
             }
         }
     }
@@ -155,11 +193,12 @@ public class Surface extends JPanel implements ActionListener {
         }
         pieceDeplacee();
     }
+
     
     /**
      * Méthode permettant de déplacer la pièce d'une seule ligne vers le bas
      */
-
+    
     private void uneLigneVersLeBas()
     {
         if (!deplacementPossible(pieceCourante, curX, curY - 1))
@@ -182,7 +221,7 @@ public class Surface extends JPanel implements ActionListener {
         for (int i = 0; i < 4; ++i) {
             int x = curX + pieceCourante.x(i);
             int y = curY - pieceCourante.y(i);
-            surf[(y * largeurSurface) + x] = pieceCourante.getForme();
+            surf[(y * largeurSurface) + x] = pieceCourante.getShape();
         }
 
         supprimerToutesLesLignes();
@@ -198,7 +237,7 @@ public class Surface extends JPanel implements ActionListener {
     
     private void nouvellePiece()
     {
-        pieceCourante.setRandomForme();
+        pieceCourante.setRandomShape();
         curX = largeurSurface / 2 + 1;
         curY = hauteurSurface - 1 + pieceCourante.minY();
 
@@ -207,14 +246,55 @@ public class Surface extends JPanel implements ActionListener {
             timer.stop();
             estCommence = false;
             statusbar.setText("game over");
-        }
+            
+            scores[5]=score;
+            
+           
+    		int tampon = 0;
+    		boolean permut;
+     
+    		do {
+    			// hypothèse : le tableau est trié
+    			permut = false;
+    			for (int i = 0; i < 6 - 1; i++) {
+    				// Teste si 2 éléments successifs sont dans le bon ordre ou non
+    				if (scores[i] < scores[i + 1]) {
+    					// s'ils ne le sont pas, on échange leurs positions
+    					tampon = scores[i];
+    					scores[i] = scores[i + 1];
+    					scores[i + 1] = tampon;
+    					permut = true;
+    				}
+    			}
+    		} while (permut);
+            		
+						PrintWriter writer;
+						try {
+							writer = new PrintWriter( new FileWriter("fichier") );
+						
+						for(int j=0;j<5;j++)
+						{
+							writer.write(scores[j]+"\n");
+						}
+						writer.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+            
+            
+			}
+			
+			
     }
+
     
     /**
      * Méthode permettant de vérifier si le déplacement solicité est possible
      * 
      */
 
+    
     private boolean deplacementPossible(Formes newPiece, int newX, int newY)
     {
         for (int i = 0; i < 4; ++i) {
@@ -232,7 +312,8 @@ public class Surface extends JPanel implements ActionListener {
         repaint();
         return true;
     }
-
+    
+    
     /**
      * Méthode permettant de détruire toutes les lignes complétées
      */
@@ -262,13 +343,16 @@ public class Surface extends JPanel implements ActionListener {
 
         if (numLigneComplete > 0) {
             nombreLigneDetruite += numLigneComplete;
-            statusbar.setText(String.valueOf(nombreLigneDetruite));
+            Surface.score+=(numLigneComplete*50);
+            statusbar.setText(String.valueOf(score));
             isFallingFinished = true;
             pieceCourante.creerForme(FormesPieces.NoShape);
             repaint();
         }
      }
 
+    
+    
     private void dessinerCarree(Graphics g, int x, int y, FormesPieces forme)
     {
         Color couleurs[] = { new Color(0, 0, 0), new Color(204, 102, 102), 
@@ -278,32 +362,26 @@ public class Surface extends JPanel implements ActionListener {
         };
 
 
-        Color couleur = couleurs[forme.ordinal()];
+        Color color = couleurs[forme.ordinal()];
 
-        g.setColor(couleur);
+        g.setColor(color);
         g.fillRect(x + 1, y + 1, largeurCarree() - 2, hauteurCarree() - 2);
 
-        g.setColor(couleur.brighter());
+        g.setColor(color.brighter());
         g.drawLine(x, y + hauteurCarree() - 1, x, y);
         g.drawLine(x, y, x + largeurCarree() - 1, y);
 
-        g.setColor(couleur.darker());
+        g.setColor(color.darker());
         g.drawLine(x + 1, y + hauteurCarree() - 1,
                          x + largeurCarree() - 1, y + hauteurCarree() - 1);
         g.drawLine(x + largeurCarree() - 1, y + hauteurCarree() - 1,
                          x + largeurCarree() - 1, y + 1);
     }
-    
-    /**
-     * 
-     * Mise en place des évenements de clavier
-     *
-     */
 
     class TAdapter extends KeyAdapter {
          public void keyPressed(KeyEvent e) {
 
-             if (!estCommence || pieceCourante.getForme() == FormesPieces.NoShape) {  
+             if (!estCommence || pieceCourante.getShape() == FormesPieces.NoShape) {  
                  return;
              }
 

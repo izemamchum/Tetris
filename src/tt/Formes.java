@@ -1,9 +1,8 @@
 package tt;
 
-
-
 import java.util.Random;
 import java.lang.Math;
+
 
 /***
  * 
@@ -11,17 +10,14 @@ import java.lang.Math;
  *
  */
 
-
 public class Formes {
-	
-	
 
     enum FormesPieces { NoShape, ZShape, SShape, LineShape, 
                TShape, SquareShape, LShape, MirroredLShape };
 
     private FormesPieces formePiece;
     private int coordonnees[][];
-    private int[][][] coordonneesTable;
+    private int[][][] coordsTable;
 
 
     public Formes() {
@@ -33,7 +29,7 @@ public class Formes {
 
     public void creerForme(FormesPieces forme) {
 
-         coordonneesTable = new int[][][] {
+         coordsTable = new int[][][] {
             { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 } },
             { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 } },
             { { 0, -1 },  { 0, 0 },   { 1, 0 },   { 1, 1 } },
@@ -46,7 +42,7 @@ public class Formes {
 
         for (int i = 0; i < 4 ; i++) {
             for (int j = 0; j < 2; ++j) {
-                coordonnees[i][j] = coordonneesTable[forme.ordinal()][i][j];
+                coordonnees[i][j] = coordsTable[forme.ordinal()][i][j];
             }
         }
         formePiece = forme;
@@ -57,14 +53,14 @@ public class Formes {
     private void setY(int index, int y) { coordonnees[index][1] = y; }
     public int x(int index) { return coordonnees[index][0]; }
     public int y(int index) { return coordonnees[index][1]; }
-    public FormesPieces getForme()  { return formePiece; }
+    public FormesPieces getShape()  { return formePiece; }
 
-    public void setRandomForme()
+    public void setRandomShape()
     {
         Random r = new Random();
         int x = Math.abs(r.nextInt()) % 7 + 1;
-        FormesPieces[] valeurs = FormesPieces.values(); 
-        creerForme(valeurs[x]);
+        FormesPieces[] values = FormesPieces.values(); 
+        creerForme(values[x]);
     }
 
     public int minX()
@@ -106,5 +102,18 @@ public class Formes {
         return result;
     }
 
+    public Formes rotateRight()
+    {
+        if (formePiece == FormesPieces.SquareShape)
+            return this;
 
+        Formes result = new Formes();
+        result.formePiece = formePiece;
+
+        for (int i = 0; i < 4; ++i) {
+            result.setX(i, -y(i));
+            result.setY(i, x(i));
+        }
+        return result;
+    }
 }
