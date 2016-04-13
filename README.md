@@ -67,6 +67,6 @@ Les différents modules de notre programme ont un faible niveau de couplage, ain
 
 <img src = "https://drive.google.com/file/d/0B6grC72fbryRdUIxWlZqZUNFd0E/view?usp=sharing" title = "Diagrame classes" alt = "diagramme classes">
 
-<img src = "https://drive.google.com/open?id=0B6grC72fbryRMnE5M3FRNVBDLXc" title = "diagramme classes" alt = "Google logo">
+<img src = "https://drive.google.com/open?id=0B6grC72fbryRMnE5M3FRNVBDLXc" title = "diagramme classes" alt = "Diagramme classes">
 
-<img src = "https://drive.google.com/open?id=0B6grC72fbryROEtJOUF2dnRKVmM" title = "diagramme classes" alt = "Google logo">
+<img src = "https://drive.google.com/open?id=0B6grC72fbryROEtJOUF2dnRKVmM" title = "diagramme classes" alt = "Diagramme classes">
