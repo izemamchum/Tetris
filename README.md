@@ -35,9 +35,9 @@ Pour lancer l'application sous linux:
 #Architecture
 
 L'architecture que nous avons adopté est une architecture modulaire constituée de trois modules principaux qui sont:
-* Module Forme: Ce module contient la difinition et la création des différents types de formes utilisées dans le jeu.
+* Module Forme: Ce module contient la définition et la création des différents types de formes utilisées dans le jeu.
 
-* Module Surface: Contient la diffinition de la surface de jeu, ainsi que les différentes méthodes de contrôle et de manipulation de jeu, ainsi que les évenements clavier résponsables de manipulation des pièces mise en jeu. Permet aussi de gérer et de contrôler la grille.
+* Module Surface: Contient la definition de la surface de jeu, ainsi que les différentes méthodes de contrôle et de manipulation de jeu, ainsi que les évenements clavier résponsables de manipulation des pièces mise en jeu. Il permet aussi de gérer et de contrôler la grille.
 
 * Module Graphique: Ce module permet de créer le design principal de jeu et de manipuler la gestion des scores. 
 
@@ -47,8 +47,8 @@ L'architecture que nous avons adopté est une architecture modulaire constituée
 Les commandes de manipulation et de contrôle de jeu sont réalisées à partir des touches de clavier, les différentes touches permettant de réaliser ces manipulations sont les suivantes :
 
 * Pour deplacer à gauche appuyez sur <--
-* Pour deplacer à gauche appuyez sur -->
-* Pour accélerer le difilement de la pièce vers le bas apuuyez sur la touche « d »
+* Pour deplacer à doite appuyez sur -->
+* Pour accélerer le défilement de la pièce vers le bas apuyez sur la touche « d »
 * Pour déposer la pièce directement sur la grille appuyez sur la flèche « bas » .
 * Pour retourner la pièce appuyez sur la flèche « haut ».
 * Pour suspendre le jeux appuyez sur la touche "p".
@@ -57,16 +57,16 @@ Les commandes de manipulation et de contrôle de jeu sont réalisées à partir 
 
 Dans notre conception nous avons appliqué certains principes « SOLID » que nous pouvons résumer dans les points suivants :
 
-* Princpie de cohésion
+* Principe de cohésion
 
 Les différents modules que nous avons programmé sont complétement cohésifs, ainsi chaque module est déstiné à réaliser une seule tâche et a une résponsabilité unique.
 
-* Princpie de couplage
+* Principe de couplage
 
 Les différents modules de notre programme ont un faible niveau de couplage, ainsi chaque module est totalement indépendant des autres modules, ce qui facilite la modification individuelle de chaque module sans être obligé de modifier les autres. 
 
 <img src = "https://drive.google.com/file/d/0B6grC72fbryRdUIxWlZqZUNFd0E/view?usp=sharing" title = "Diagrame classes" alt = "diagramme classes">
 
-<img src = "https://drive.google.com/open?id=0B6grC72fbryRMnE5M3FRNVBDLXc" title = "google logo" alt = "Google logo">
+<img src = "https://drive.google.com/open?id=0B6grC72fbryRMnE5M3FRNVBDLXc" title = "diagramme classes" alt = "Google logo">
 
-<img src = "https://drive.google.com/open?id=0B6grC72fbryROEtJOUF2dnRKVmM" title = "google logo" alt = "Google logo">
+<img src = "https://drive.google.com/open?id=0B6grC72fbryROEtJOUF2dnRKVmM" title = "diagramme classes" alt = "Google logo">
