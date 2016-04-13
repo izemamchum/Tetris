@@ -66,3 +66,7 @@ Les différents modules que nous avons programmé sont complétement cohésifs, 
 Les différents modules de notre programme ont un faible niveau de couplage, ainsi chaque module est totalement indépendant des autres modules, ce qui facilite la modification individuelle de chaque module sans être obligé de modifier les autres. 
 
 <img src = "https://drive.google.com/file/d/0B6grC72fbryRdUIxWlZqZUNFd0E/view?usp=sharing" title = "Diagrame classes" alt = "diagramme classes">
+
+<img src = "https://drive.google.com/open?id=0B6grC72fbryRMnE5M3FRNVBDLXc" title = "google logo" alt = "Google logo">
+
+<img src = "https://drive.google.com/open?id=0B6grC72fbryROEtJOUF2dnRKVmM" title = "google logo" alt = "Google logo">
